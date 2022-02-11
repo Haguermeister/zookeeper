@@ -3,6 +3,10 @@ const res = require('express/lib/response');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const { animals } = require('./data/animals');
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+}
 const filterByQuery = (query, animalsArray) => {
     let personalityTraitsArray = [];
     let filteredResults = animalsArray;
@@ -38,6 +42,17 @@ app.get('/api/animals', (req, res) => {
     }
     res.json(results);
 });
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    }
+    else {
+        res.send(404);
+    }
+    res.json(result);
+});
 app.listen(PORT, () => {
     console.log(`API Server now on port ${PORT}!`);
 });
+//https://aqueous-cove-26907.herokuapp.com/api/animals
